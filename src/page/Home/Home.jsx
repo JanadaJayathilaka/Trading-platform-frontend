@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 import AssetTable from "./AssetTable";
+import StockChart from "./StockChart";
 
 const Home = () => {
   const [category, setCategory] = useState("all");
@@ -46,6 +47,9 @@ const Home = () => {
             </Button>
           </div>
           <AssetTable />
+        </div>
+        <div className="sm:hidden lg:block lg:w-[50%] p-5">
+          <StockChart />
         </div>
       </div>
     </div>
