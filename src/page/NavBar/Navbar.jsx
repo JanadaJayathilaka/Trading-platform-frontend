@@ -20,7 +20,7 @@ import { AvatarFallback } from "@/components/ui/avatar";
 
 const Navbar = () => {
   return (
-    <div className="px-2 py-3 border-b z-50 sticky  bg-background bg-opacity-0 top-0 left-0 right-0 flex justify-between items-center">
+    <div className="px-2 py-3 border-b border-border z-50 sticky  bg-background bg-opacity-0 top-0 left-0 right-0 flex justify-between items-center">
       <div className="flex items-center gap-3">
         <Sheet>
           <SheetTrigger asChild>

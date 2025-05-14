@@ -59,7 +59,7 @@ const Sidebar = () => {
           <SheetClose className="w-full">
             <Button
               variant="outline"
-              className="flex items-center gap-5 py-6 w-full hover:bg-cyan-700 duration-300 ease-in"
+              className="flex items-center gap-5 border-border py-6 w-full hover:bg-border duration-300 ease-in"
             >
               <span className="w-8">{item.icon}</span>
               <p>{item.name}</p>
