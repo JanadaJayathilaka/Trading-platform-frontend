@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import path from "path";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const menu = [
   { name: "Home", path: "/", icon: <HomeIcon className="h-6 w-6" /> },
@@ -52,6 +53,10 @@ const menu = [
   { name: "Logout", path: "/", icon: <ExitIcon className="h-6 w-6" /> },
 ];
 const Sidebar = () => {
+  const navigate = useNavigate();
+  // const handleNavigate =()=>{
+
+  // }
   return (
     <div className="mt-10 space-y-5">
       {menu.map((item) => (
@@ -60,6 +65,7 @@ const Sidebar = () => {
             <Button
               variant="outline"
               className="flex items-center gap-5 border-border py-6 w-full hover:bg-border duration-300 ease-in"
+              onClick={() => navigate(item.path)}
             >
               <span className="w-8">{item.icon}</span>
               <p>{item.name}</p>

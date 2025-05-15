@@ -1,8 +1,29 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
+const timeSeries = [
+  {
+    keyword: "DIGITAL_CURRENCY_DAILY",
+    key: "Time Series (Daily)",
+    label: "1 Day",
+    value: 1,
+  },
+  {
+    keyword: "DIGITAL_CURRENCY_WEEKLY",
+    key: "Weekly Time Series",
+    label: "1 Week",
+    value: 7,
+  },
+  {
+    keyword: "DIGITAL_CURRENCY_MONTHLY",
+    key: "Monthly Time Series",
+    label: "1 Month",
+    value: 30,
+  },
+];
 const StockChart = () => {
+  const [activeLabel, setActiveLabel] = useState("1 Day");
   const series = [
     {
       data: [
@@ -108,12 +129,29 @@ const StockChart = () => {
       show: true,
     },
   };
+
+  const handleActiveLabel = (value) => {
+    setActiveLabel(value);
+  };
   return (
     <div>
-      <div>
-        <Button>ADD</Button>
-        <Button>ADD</Button>
-        <Button>ADD</Button>
+      <div className="space-x-3">
+        {timeSeries.map((item) => (
+          <Button
+            // variant={
+            //   activeLabel == item.label ? "bg-white text-background" : ""
+            // }
+            onClick={() => handleActiveLabel(item.label)}
+            className={`${
+              activeLabel == item.label
+                ? "bg-white text-background"
+                : "hover:bg-border "
+            }`}
+            key={item.label}
+          >
+            {item.label}
+          </Button>
+        ))}
       </div>
       <div id="chart-timelines">
         <ReactApexChart
