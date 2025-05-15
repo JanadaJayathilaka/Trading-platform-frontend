@@ -12,7 +12,7 @@ import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 const Portfolio = () => {
   return (
     <div className="p-5 lg:p-20">
-      <h1 className="font-bold text-3xl">Portfolio</h1>
+      <h1 className="font-bold text-3xl pb-5">Portfolio</h1>
       <Table>
         <TableHeader>
           <TableRow>
