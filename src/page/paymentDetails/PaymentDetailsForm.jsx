@@ -55,7 +55,24 @@ const PaymentDetailsForm = () => {
                 <FormControl>
                   <Input
                     className="border w-full border-gray-700 p-5"
-                    placeholder="Janada J"
+                    placeholder="#4554A"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="accountNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Account Number</FormLabel>
+                <FormControl>
+                  <Input
+                    className="border w-full border-gray-700 p-5"
+                    placeholder="***************3747"
                     {...field}
                   />
                 </FormControl>
