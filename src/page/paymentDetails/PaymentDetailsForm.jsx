@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -8,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { DialogClose } from "@radix-ui/react-dialog";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -80,6 +82,45 @@ const PaymentDetailsForm = () => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="ConfirmAccountNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Account Number</FormLabel>
+                <FormControl>
+                  <Input
+                    className="border w-full border-gray-700 p-5"
+                    placeholder="confirm account number"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bankName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bank Name</FormLabel>
+                <FormControl>
+                  <Input
+                    className="border w-full border-gray-700 p-5"
+                    placeholder="Peoples Bank"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <DialogClose className="w-full">
+            <Button type="submit" className="w-full py-5 bg-white text-black">
+              Submit
+            </Button>
+          </DialogClose>
         </form>
       </Form>
     </div>
