@@ -7,6 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -29,16 +30,35 @@ const PaymentDetailsForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name="username"
+            name="accountHolderName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Account Holder Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input
+                    className="border w-full border-gray-700 p-5"
+                    placeholder="Janada J"
+                    {...field}
+                  />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="IFSC"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>IFSC Code</FormLabel>
+                <FormControl>
+                  <Input
+                    className="border w-full border-gray-700 p-5"
+                    placeholder="Janada J"
+                    {...field}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
