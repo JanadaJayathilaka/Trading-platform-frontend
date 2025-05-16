@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ReloadIcon, ShuffleIcon } from "@radix-ui/react-icons";
+import { ReloadIcon, ShuffleIcon, UpdateIcon } from "@radix-ui/react-icons";
 import { CopyIcon, DollarSign, UploadIcon, WalletIcon } from "lucide-react";
 import React from "react";
 import TopUpForm from "./TopUpForm";
@@ -92,6 +92,12 @@ const Wallet = () => {
             </div>
           </CardContent>
         </Card>
+        <div className="py-5 pt-10">
+          <div className="flex gap-2 items-center pb-5 ">
+            <h1 className="text-2xl font-semibold">History</h1>
+            <UpdateIcon className="h-7 w-7 p-0 cursor-pointer hover:text-gray-400" />
+          </div>
+        </div>
       </div>
     </div>
   );
