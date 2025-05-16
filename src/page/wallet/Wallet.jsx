@@ -12,6 +12,7 @@ import React from "react";
 import TopUpForm from "./TopUpForm";
 import WithdrawalForm from "./WithdrawalForm";
 import TransferForm from "./TransferForm";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const Wallet = () => {
   return (
@@ -97,6 +98,30 @@ const Wallet = () => {
             <h1 className="text-2xl font-semibold">History</h1>
             <UpdateIcon className="h-7 w-7 p-0 cursor-pointer hover:text-gray-400" />
           </div>
+
+          {[1, 1, 1, 1, 1, 1, 1, 1].map((item, i) => (
+            <div key={i} className="space-y-5">
+              <Card className="flex items-center justify-between px-5 py-2 border-border">
+                {/* Left Side */}
+                <div className="flex items-center gap-5">
+                  <Avatar className="bg-border">
+                    <AvatarFallback>
+                      <ShuffleIcon />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="space-y-1">
+                    <h1>Buy Asset</h1>
+                    <p className="text-sm text-gray-500">2025/5/16</p>
+                  </div>
+                  <div className="whitespace-nowrap">
+                    <p className="text-green-500 font-medium ml-150">999 USD</p>
+                  </div>
+                </div>
+
+                {/* Right Side */}
+              </Card>
+            </div>
+          ))}
         </div>
       </div>
     </div>
