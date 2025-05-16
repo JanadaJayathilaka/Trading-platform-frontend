@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -7,6 +8,10 @@ import React, { useState } from "react";
 const TopUpForm = () => {
   const [amount, setAmount] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("RAZORPAY");
+
+  const handleSubmit = () => {
+    console.log(amount, paymentMethod);
+  };
 
   const handlePaymentMethodChange = (value) => {
     setPaymentMethod(value);
@@ -66,6 +71,13 @@ const TopUpForm = () => {
           </div>
         </RadioGroup>
       </div>
+
+      <Button
+        onClick={handleSubmit}
+        className="w-full py-7 bg-amber-50 text-black"
+      >
+        Submit
+      </Button>
     </div>
   );
 };
