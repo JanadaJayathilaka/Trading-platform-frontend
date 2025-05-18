@@ -1,0 +1,16 @@
+.authContainer {
+  background-image: url("https://dx.trade/app/uploads/2024/05/DXtrade-XT-A-Trading-Platform-for-Stock-Brokers-of-All-Sizes.png");
+  height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.overlay {
+  position: absolute;
+  z-index: 1;
+}
+
+.bgBlur {
+  backdrop-filter: blur(10px);
+}
