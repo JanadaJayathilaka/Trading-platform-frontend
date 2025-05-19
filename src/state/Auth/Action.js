@@ -20,6 +20,7 @@ export const register = (userData) => async (dispatch) => {
     console.log(user);
 
     dispatch({ type: REGISTER_SUCCESS, payload: user.jwt });
+    localStorage.setItem("jwt", user.jwt);
   } catch (error) {
     dispatch({ type: REGISTER_FAILURE, payload: error.message });
     console.log(error);
@@ -35,6 +36,7 @@ export const login = (userData) => async (dispatch) => {
     console.log(user);
 
     dispatch({ type: LOGIN_SUCCESS, payload: user.jwt });
+    localStorage.setItem("jwt", user.jwt);
   } catch (error) {
     dispatch({ type: LOGIN_FAILURE, payload: error.message });
     console.log(error);
