@@ -13,7 +13,7 @@ import {
 
 export const register = (userData) => async (dispatch) => {
   dispatch({ type: REGISTER_REQUEST });
-  const baseUrl = "http://localhost:8080/";
+  const baseUrl = "http://localhost:8080";
   try {
     const response = await axios.post(`${baseUrl}/auth/signup`, userData);
     const user = response.data;
@@ -28,7 +28,7 @@ export const register = (userData) => async (dispatch) => {
 
 export const login = (userData) => async (dispatch) => {
   dispatch({ type: LOGIN_REQUEST });
-  const baseUrl = "http://localhost:8080/";
+  const baseUrl = "http://localhost:8080";
   try {
     const response = await axios.post(`${baseUrl}/auth/signin`, userData);
     const user = response.data;
@@ -43,7 +43,7 @@ export const login = (userData) => async (dispatch) => {
 
 export const getUser = (jwt) => async (dispatch) => {
   dispatch({ type: GET_USER_REQUEST });
-  const baseUrl = "http://localhost:8080/";
+  const baseUrl = "http://localhost:8080";
   try {
     const response = await axios.get(`${baseUrl}/api/users/profile`, {
       headers: {
