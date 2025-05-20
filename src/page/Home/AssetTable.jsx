@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -8,11 +8,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getCoinList } from "@/state/Coin/Action";
 
-const AssetTable = () => {
+const AssetTable = ({ coin, category }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   return (
     <Table>
       <TableHeader>
@@ -26,28 +30,27 @@ const AssetTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => (
+        {coin.map((item, index) => (
           <TableRow
-            key={index}
+            key={item.id}
             className="hover:bg-border border-1 border-border"
           >
             <TableCell
               onClick={() => navigate("/market/bitcoin/")}
-              className="font-medium flex items-center gap-2"
+              className="font-medium flex items-center gap-3 cursor-pointer"
             >
-              <Avatar className="-z-50">
-                <AvatarImage
-                  src="https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400"
-                  className="h-10 w-10"
-                />
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={item.image} alt={item.name} />
+                <AvatarFallback>{item.name.slice(0, 2)}</AvatarFallback>
               </Avatar>
-              <span>Bitcoin</span>
+              <span>{item.name}</span>
             </TableCell>
-            <TableCell>BTC</TableCell>
-            <TableCell>32869995099</TableCell>
-            <TableCell>2058695677578</TableCell>
-            <TableCell>0.30637%</TableCell>
-            <TableCell className="text-right">$103560</TableCell>
+
+            <TableCell>{item.symbol.toUpperCase()}</TableCell>
+            <TableCell>{item.total_volume}</TableCell>
+            <TableCell>{item.market_cap}</TableCell>
+            <TableCell>{item.price_change_percentage_24h}</TableCell>
+            <TableCell className="text-right">{item.current_price}</TableCell>
           </TableRow>
         ))}
       </TableBody>
