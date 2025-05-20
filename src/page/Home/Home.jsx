@@ -1,17 +1,21 @@
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AssetTable from "./AssetTable";
 import StockChart from "./StockChart";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+
 import { Cross1Icon, DotIcon } from "@radix-ui/react-icons";
 import { Ghost, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useDispatch, useSelector } from "react-redux";
+import { getCoinList } from "@/state/Coin/Action";
 
 const Home = () => {
   const [category, setCategory] = useState("all");
   const [inputValue, setInputValue] = useState("");
   const [isBotRelese, setUsBotRelese] = useState(false);
-
+  const { coin } = useSelector((store) => store);
+  const dispatch = useDispatch();
   const handleBotRelese = () => {
     setUsBotRelese(!isBotRelese);
   };
@@ -28,6 +32,10 @@ const Home = () => {
     }
     setInputValue("");
   };
+
+  useEffect(() => {
+    dispatch(getCoinList(1));
+  }, []);
   return (
     <div className="relative">
       <div className="lg:flex">
@@ -66,7 +74,7 @@ const Home = () => {
               Top Losers
             </Button>
           </div>
-          <AssetTable />
+          <AssetTable coin={coin.coinList} category={category} />
         </div>
         <div className="sm:hidden lg:block lg:w-[50%] p-5">
           <StockChart />
