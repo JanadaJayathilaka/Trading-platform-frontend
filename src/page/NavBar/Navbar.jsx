@@ -17,8 +17,10 @@ import {
 import React from "react";
 import Sidebar from "./Sidebar";
 import { AvatarFallback } from "@/components/ui/avatar";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const { auth } = useSelector((store) => store);
   return (
     <div className="px-2 py-3 border-b border-border z-50 sticky  bg-background bg-opacity-0 top-0 left-0 right-0 flex justify-between items-center">
       <div className="flex items-center gap-3">
@@ -65,7 +67,9 @@ const Navbar = () => {
       </div>
       <div>
         <Avatar>
-          <AvatarFallback>J</AvatarFallback>
+          <AvatarFallback>
+            {auth.user?.fullName[0].toUpperCase()}
+          </AvatarFallback>
         </Avatar>
       </div>
     </div>
