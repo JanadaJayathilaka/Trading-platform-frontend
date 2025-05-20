@@ -1,4 +1,4 @@
-const {
+import {
   FETCH_COIN_BY_ID_REQUEST,
   FETCH_COIN_LIST_REQUEST,
   FETCH_COIN_DETAILS_REQUEST,
@@ -17,7 +17,7 @@ const {
   FETCH_COIN_BY_ID_FAILURE,
   FETCH_COIN_DETAILS_FAILURE,
   FETCH_TOP_50_COINS_FAILURE,
-} = require("./ActionTypes");
+} from "./ActionTypes";
 
 const initialState = {
   coinList: [],
