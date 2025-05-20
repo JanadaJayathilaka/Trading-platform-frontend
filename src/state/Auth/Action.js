@@ -11,7 +11,6 @@ import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
 } from "./ActionTypes";
-import { Navigate } from "react-router-dom";
 
 export const register = (userData) => async (dispatch) => {
   dispatch({ type: REGISTER_REQUEST });
