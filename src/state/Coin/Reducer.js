@@ -92,8 +92,8 @@ const coinReducer = (state = initialState, action) => {
         marketChart: {
           loading: false,
           data: [],
-          error: null,
         },
+        error: null,
       };
 
     case FETCH_COIN_LIST_FAILURE:
