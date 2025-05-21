@@ -8,10 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getCoinList } from "@/state/Coin/Action";
 
 const AssetTable = ({ coin, category }) => {
   const dispatch = useDispatch();
@@ -36,21 +35,23 @@ const AssetTable = ({ coin, category }) => {
             className="hover:bg-border border-1 border-border"
           >
             <TableCell
-              onClick={() => navigate("/market/bitcoin/")}
-              className="font-medium flex items-center gap-3 cursor-pointer"
+              onClick={() => navigate(`/market/${item.id}`)}
+              className="font-medium flex items-center gap-2"
             >
               <Avatar className="h-10 w-10">
-                <AvatarImage src={item.image} alt={item.name} />
-                <AvatarFallback>{item.name.slice(0, 2)}</AvatarFallback>
+                <AvatarImage
+                  src={item.image}
+                  className="h-full w-full object-cover"
+                />
               </Avatar>
+
               <span>{item.name}</span>
             </TableCell>
-
-            <TableCell>{item.symbol.toUpperCase()}</TableCell>
+            <TableCell>{item.symbol}</TableCell>
             <TableCell>{item.total_volume}</TableCell>
             <TableCell>{item.market_cap}</TableCell>
             <TableCell>{item.price_change_percentage_24h}</TableCell>
-            <TableCell className="text-right">{item.current_price}</TableCell>
+            <TableCell className="text-right">${item.current_price}</TableCell>
           </TableRow>
         ))}
       </TableBody>
