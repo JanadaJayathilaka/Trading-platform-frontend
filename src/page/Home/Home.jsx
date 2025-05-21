@@ -8,7 +8,7 @@ import { Cross1Icon, DotIcon } from "@radix-ui/react-icons";
 import { Ghost, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useDispatch, useSelector } from "react-redux";
-import { getCoinList } from "@/state/Coin/Action";
+import { getCoinList, getTop50CoinList } from "@/state/Coin/Action";
 
 const Home = () => {
   const [category, setCategory] = useState("all");
@@ -32,6 +32,10 @@ const Home = () => {
     }
     setInputValue("");
   };
+
+  useEffect(() => {
+    dispatch(getTop50CoinList());
+  }, [category]);
 
   useEffect(() => {
     dispatch(getCoinList(1));
@@ -74,7 +78,10 @@ const Home = () => {
               Top Losers
             </Button>
           </div>
-          <AssetTable coin={coin.coinList} category={category} />
+          <AssetTable
+            coin={category == "all" ? coin.coinList : coin.top50}
+            category={category}
+          />
         </div>
         <div className="sm:hidden lg:block lg:w-[50%] p-5">
           <StockChart />
