@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -11,7 +11,6 @@ import {
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getCoinList } from "@/state/Coin/Action";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const AssetTable = ({ coin, category }) => {
@@ -19,8 +18,8 @@ const AssetTable = ({ coin, category }) => {
   const navigate = useNavigate();
 
   return (
-    <Table>
-      <ScrollArea className={`${category == "all" ? "h-[74vh]" : "h-[82vh]"}`}>
+    <ScrollArea className={`${category === "all" ? "h-[77vh]" : "h-[82vh]"}`}>
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">COIN</TableHead>
@@ -32,7 +31,7 @@ const AssetTable = ({ coin, category }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {coin.map((item, index) => (
+          {coin.map((item) => (
             <TableRow
               key={item.id}
               className="hover:bg-border border-1 border-border "
@@ -41,10 +40,10 @@ const AssetTable = ({ coin, category }) => {
                 onClick={() => navigate(`/market/${item.id}`)}
                 className="font-medium flex items-center gap-2 mr-15"
               >
-                <Avatar className=" shrink-0">
+                <Avatar className="shrink-0">
                   <AvatarImage
                     src={item.image}
-                    className="h-10 w-10 object-cover rounded full"
+                    className="h-10 w-10 object-cover rounded-full"
                   />
                 </Avatar>
                 <span>{item.name}</span>
@@ -59,8 +58,8 @@ const AssetTable = ({ coin, category }) => {
             </TableRow>
           ))}
         </TableBody>
-      </ScrollArea>
-    </Table>
+      </Table>
+    </ScrollArea>
   );
 };
 
