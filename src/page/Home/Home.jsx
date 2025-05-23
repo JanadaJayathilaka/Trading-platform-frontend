@@ -47,6 +47,12 @@ const Home = () => {
     dispatch(getTop50CoinList());
   }, [category]);
 
+  // useEffect(() => {
+  //   if (category === "top50") {
+  //     dispatch(getTop50CoinList());
+  //   }
+  // }, [category, dispatch]);
+
   useEffect(() => {
     dispatch(getCoinList(1));
   }, []);

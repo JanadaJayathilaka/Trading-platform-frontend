@@ -69,7 +69,7 @@ const Sidebar = () => {
         <div key={item.name}>
           <SheetClose className="w-full">
             <Button
-              variant="outline"
+              variant="ghost"
               className="flex items-center gap-5 border-border py-6 w-full hover:bg-border duration-300 ease-in"
               onClick={() => {
                 navigate(item.path);

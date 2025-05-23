@@ -5,7 +5,6 @@ import React from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -13,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import AccountVerificationForm from "./AccountVerificationForm";
 import { useSelector } from "react-redux";
-import { store } from "@/state/Store";
 
 const Profile = () => {
   const { auth } = useSelector((store) => store);

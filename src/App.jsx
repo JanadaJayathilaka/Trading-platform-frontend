@@ -26,13 +26,14 @@ function App() {
   useEffect(() => {
     dispatch(getUser(auth.jwt || localStorage.getItem("jwt")));
   }, [auth.jwt]);
+
   return (
     <>
       {auth.user ? (
         <div>
           <Navbar></Navbar>
           <Routes>
-            <Route path="/" element={<Home />} />
+            {/* <Route path="/" element={<Home />} /> */}
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/activity" element={<Activity />} />
             <Route path="/wallet" element={<Wallet />} />
@@ -48,6 +49,23 @@ function App() {
       ) : (
         <Auth />
       )}
+
+      {/* <div>
+        <Navbar></Navbar>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/activity" element={<Activity />} />
+          <Route path="/wallet" element={<Wallet />} />
+          <Route path="/withdrawal" element={<Withdrawal />} />
+          <Route path="/payment-details" element={<PaymentDetails />} />
+          <Route path="/market/:id" element={<StockDetails />} />
+          <Route path="/watchlist" element={<WatchList />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/search" element={<SearchCoin />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div> */}
     </>
   );
 }

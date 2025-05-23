@@ -28,6 +28,14 @@ const StockDetails = () => {
       fetchCoinDetails({ coinId: id, jwt: localStorage.getItem("jwt") })
     );
   }, [id]);
+
+  // useEffect(() => {
+  //   if (id) {
+  //     dispatch(
+  //       fetchCoinDetails({ coinId: id, jwt: localStorage.getItem("jwt") })
+  //     );
+  //   }
+  // }, [id, dispatch]);
   return (
     <div className="p-5 mt-5">
       <div className="flex justify-between ">
