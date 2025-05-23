@@ -15,7 +15,7 @@ import NotFound from "./page/notFound/NotFound";
 import Auth from "./page/Auth/Auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getUser } from "./state/Auth/Action";
+import { getUser } from "./Redux/Auth/Action";
 
 function App() {
   const { auth } = useSelector((store) => store);
@@ -33,7 +33,7 @@ function App() {
         <div>
           <Navbar></Navbar>
           <Routes>
-            {/* <Route path="/" element={<Home />} /> */}
+            <Route path="/" element={<Home />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/activity" element={<Activity />} />
             <Route path="/wallet" element={<Wallet />} />

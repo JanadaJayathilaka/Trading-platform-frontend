@@ -1,17 +1,22 @@
+import { paymentHandler } from "@/Redux/Wallet/Action";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { paymentHandler } from "@/state/Wallet/Action";
+import { Skeleton } from "@/components/ui/skeleton";
 import { DotFilledIcon } from "@radix-ui/react-icons";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-const TopUpForm = () => {
-  const [amount, setAmount] = useState("");
+const TopupForm = () => {
+  const [amount, setAmount] = useState();
   const [paymentMethod, setPaymentMethod] = useState("RAZORPAY");
-
+  const { wallet } = useSelector((store) => store);
   const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    setAmount(e.target.value);
+  };
 
   const handleSubmit = () => {
     dispatch(
@@ -23,75 +28,77 @@ const TopUpForm = () => {
     );
     console.log(amount, paymentMethod);
   };
-
-  const handlePaymentMethodChange = (value) => {
-    setPaymentMethod(value);
-  };
-  const handleChange = (e) => {
-    setAmount(e.target.value);
-  };
-
   return (
-    <div className="pt-10 space-y-5 ">
+    <div className="pt-10 space-y-5">
       <div>
         <h1 className="pb-1">Enter Amount</h1>
         <Input
-          className="py-7 text-lg border-border focus:border-border"
-          placeholder="$9999"
           onChange={handleChange}
           value={amount}
+          className="py-7 text-lg"
+          placeholder="$9999"
         />
       </div>
+
       <div>
         <h1 className="pb-1">Select payment method</h1>
         <RadioGroup
-          onValueChange={(value) => handlePaymentMethodChange(value)}
+          onValueChange={(value) => {
+            setPaymentMethod(value);
+          }}
           className="flex"
           defaultValue="RAZORPAY"
         >
-          <div className="flex items-center space-x-2 border-0 p-3 px-5 rounded-md">
+          <div className="flex items-center space-x-2 border p-3 px-5 rounded-md">
             <RadioGroupItem
               icon={DotFilledIcon}
-              className="h-9 w-9 "
+              iconClassName="h-8 w-8"
+              className="h-9 w-9"
               value="RAZORPAY"
               id="r1"
             />
             <Label htmlFor="r1">
               <div className="bg-white rounded-md px-5 py-2 w-32">
                 <img
-                  className="h-3"
-                  src="data:image/png;base64,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"
-                ></img>
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Razorpay_logo.svg/1200px-Razorpay_logo.svg.png"
+                  alt=""
+                />
               </div>
             </Label>
           </div>
-          <div className="flex items-center space-x-2 border-0 p-3 px-5 rounded-md">
+          <div className="flex items-center space-x-2 rounded-md border p-3 px-5">
             <RadioGroupItem
               icon={DotFilledIcon}
-              className="h-9 w-9 "
+              className="h-9 w-9"
+              iconClassName="h-8 w-8"
               value="STRIPE"
               id="r2"
             />
             <Label htmlFor="r2">
-              <div className="bg-white rounded-md px-5 py-2 w-32">
+              <div className="bg-white rounded-md px-5 py- w-32">
                 <img
-                  className="h-3"
-                  src="data:image/png;base64,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"
-                ></img>
+                  className="h-10"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/768px-Stripe_Logo%2C_revised_2016.svg.png"
+                  alt=""
+                />
               </div>
             </Label>
           </div>
         </RadioGroup>
       </div>
-
-      <Button
-        onClick={handleSubmit}
-        className="w-full py-7 bg-amber-50 text-black"
-      >
-        Submit
-      </Button>
+      {wallet.loading ? (
+        <Skeleton className="py-7 w-full" />
+      ) : (
+        <Button
+          onClick={handleSubmit}
+          variant=""
+          className="w-full py-7 text-xl"
+        >
+          Submit
+        </Button>
+      )}
     </div>
   );
 };
 
-export default TopUpForm;
+export default TopupForm;

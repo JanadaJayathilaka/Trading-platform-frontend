@@ -1,15 +1,21 @@
+/* eslint-disable no-unused-vars */
+import { useEffect, useRef, useState } from "react";
+import { AssetTable } from "./AssetTable";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
-import AssetTable from "./AssetTable";
-import StockChart from "./StockChart";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-
-import { Cross1Icon, DotIcon } from "@radix-ui/react-icons";
-import { Ghost, MessageCircle } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import StockChart from "../StockDetails/StockChart";
+import {
+  ChatBubbleIcon,
+  ChevronLeftIcon,
+  Cross1Icon,
+  DotIcon,
+} from "@radix-ui/react-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getCoinList, getTop50CoinList } from "@/state/Coin/Action";
-
+import {
+  fetchCoinDetails,
+  fetchCoinList,
+  fetchTreadingCoinList,
+  getTop50CoinList,
+} from "@/Redux/Coin/Action";
 import {
   Pagination,
   PaginationContent,
@@ -17,130 +23,211 @@ import {
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
+import { MessageCircle } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { sendMessage } from "@/Redux/Chat/Action";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import SpinnerBackdrop from "@/components/custome/SpinnerBackdrop";
 
 const Home = () => {
-  const [category, setCategory] = useState("all");
-  const [inputValue, setInputValue] = useState("");
-  const [isBotRelese, setUsBotRelese] = useState(false);
-  const { coin } = useSelector((store) => store);
   const dispatch = useDispatch();
-  const handleBotRelese = () => {
-    setUsBotRelese(!isBotRelese);
-  };
-  const handleCategory = (value) => {
-    setCategory(value);
-  };
-  const handleChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleKeyPress = (event) => {
-    if (event.key == "Enter") {
-      console.log(inputValue);
-    }
-    setInputValue("");
-  };
+  const [page, setPage] = useState(1);
+  const [category, setCategory] = useState("all");
+  const { coin, chatBot, auth } = useSelector((store) => store);
+  const [isBotRelease, setIsBotRelease] = useState(false); //
 
   useEffect(() => {
-    dispatch(getTop50CoinList());
+    dispatch(fetchCoinList(page));
+  }, [page]);
+
+  useEffect(() => {
+    dispatch(fetchCoinDetails({
+      coinId: "bitcoin",
+      jwt: auth.jwt || localStorage.getItem("jwt"),
+    }))
+    
+  }, []);
+
+  useEffect(() => {
+    if (category == "top50") {
+      dispatch(getTop50CoinList());
+    }else if( category == "trading"){
+      dispatch(fetchTreadingCoinList())
+    }
   }, [category]);
 
-  // useEffect(() => {
-  //   if (category === "top50") {
-  //     dispatch(getTop50CoinList());
-  //   }
-  // }, [category, dispatch]);
+  const handlePageChange = (page) => {
+    setPage(page);
+  };
+
+  const handleBotRelease = () => setIsBotRelease(!isBotRelease);
+
+  const [inputValue, setInputValue] = useState("");
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      console.log("Enter key pressed:", inputValue);
+      dispatch(
+        sendMessage({
+          prompt: inputValue,
+          jwt: auth.jwt || localStorage.getItem("jwt"),
+        })
+      );
+      setInputValue("");
+    }
+  };
+
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const chatContainerRef = useRef(null);
 
   useEffect(() => {
-    dispatch(getCoinList(1));
-  }, []);
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatBot.messages]);
+
+  
+
+  if (coin.loading) {
+    return <SpinnerBackdrop />;
+  }
+
   return (
     <div className="relative">
-      <div className="lg:flex">
-        <div className="lg:w-[50%] lg:border-r border-border">
-          <div className="p-3 flex items-center gap-4">
+      <div className="lg:flex ">
+        <div className="lg:w-[50%] border-r">
+          <div className="p-3 flex items-center gap-4 ">
             <Button
-              onClick={() => handleCategory("all")}
-              className={`rounded-full ${
-                category === "all" ? "bg-white text-black" : ""
-              }`}
+              variant={category == "all" ? "default" : "outline"}
+              onClick={() => setCategory("all")}
+              className="rounded-full"
             >
-              ALL
+              All
             </Button>
             <Button
-              onClick={() => handleCategory("top50")}
-              className={`rounded-full ${
-                category === "top50" ? "bg-white text-black" : ""
-              }`}
+              variant={category == "top50" ? "default" : "outline"}
+              onClick={() => setCategory("top50")}
+              className="rounded-full"
             >
-              Top50
+              Top 50
             </Button>
-            <Button
-              onClick={() => handleCategory("topGainers")}
-              className={`rounded-full ${
-                category === "topGainers" ? "bg-white text-black" : ""
-              }`}
-            >
-              Top Gainers
-            </Button>
-            <Button
-              onClick={() => handleCategory("topLosers")}
-              className={`rounded-full ${
-                category === "topLosers" ? "bg-white text-black" : ""
-              }`}
-            >
-              Top Losers
-            </Button>
+            
+           
           </div>
           <AssetTable
-            coin={category == "all" ? coin.coinList : coin.top50}
             category={category}
+            coins={category == "all" ? coin.coinList : coin.top50}
           />
-          <div>
-            <Pagination>
+          {category == "all" && (
+            <Pagination className="border-t py-3">
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious href="#" />
+                  <Button
+                    variant="ghost"
+                    disabled={page == 1}
+                    onClick={() => handlePageChange(page - 1)}
+                  >
+                    <ChevronLeftIcon className="h-4 w-4 mr-1" />
+                    Previous
+                  </Button>
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
+                  <PaginationLink
+                    onClick={() => handlePageChange(1)}
+                    isActive={page == 1}
+                  >
+                    1
+                  </PaginationLink>
                 </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={() => handlePageChange(2)}
+                    isActive={page == 2}
+                  >
+                    2
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink
+                    onClick={() => handlePageChange(3)}
+                    isActive={page == 3}
+                  >
+                    3
+                  </PaginationLink>
+                </PaginationItem>
+                {page > 3 && (
+                  <PaginationItem>
+                    <PaginationLink
+                      onClick={() => handlePageChange(3)}
+                      isActive
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                )}
                 <PaginationItem>
                   <PaginationEllipsis />
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationNext href="#" />
+                  <PaginationNext
+                    className="cursor-pointer"
+                    onClick={() => handlePageChange(page + 1)}
+                  />
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
-          </div>
+          )}
         </div>
-        <div className="sm:hidden lg:block lg:w-[50%] p-5">
+
+        <div className="hidden lg:block lg:w-[50%] p-5">
           <StockChart coinId={"bitcoin"} />
           <div className="flex gap-5 items-center">
             <div>
               <Avatar>
-                <AvatarImage
-                  src={
-                    "https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628"
-                  }
-                />
+                <AvatarImage src={coin.coinDetails?.image?.large} />
               </Avatar>
             </div>
             <div>
-              {" "}
               <div className="flex items-center gap-2">
-                <p>ETH</p>
+                <p>{coin.coinDetails?.symbol?.toUpperCase()}</p>
                 <DotIcon className="text-gray-400" />
-                <p className="text-gray-400">Ehtereum</p>
+                <p className="text-gray-400">{coin.coinDetails?.name}</p>
               </div>
               <div className="flex items-end gap-2">
-                <p className="text-xl font-bold">5454</p>
-                <p className="text-red-600">
-                  <span>-260121416.541</span>
-                  <span>(-0.25898%)</span>
+                <p className="text-xl font-bold">
+                  {coin.coinDetails?.market_data.current_price.usd}
+                </p>
+                <p
+                  className={`${
+                    coin.coinDetails?.market_data.market_cap_change_24h < 0
+                      ? "text-red-600"
+                      : "text-green-600"
+                  }`}
+                >
+                  <span className="">
+                    {coin.coinDetails?.market_data.market_cap_change_24h}
+                  </span>
+                  <span>
+                    (
+                    {
+                      coin.coinDetails?.market_data
+                        .market_cap_change_percentage_24h
+                    }
+                    %)
+                  </span>
                 </p>
               </div>
             </div>
@@ -148,42 +235,55 @@ const Home = () => {
         </div>
       </div>
       <section className="absolute bottom-5 right-5 z-40 flex flex-col justify-end items-end gap-2">
-        {isBotRelese && (
-          <div className="rounded-md w-[20rem] md:w-[25rem] lg:w-[25rem] h-[70vh] bg-slate-900">
+        {isBotRelease && (
+          <div className="rounded-md w-[20rem]  md:w-[25rem] lg:w-[25rem] h-[70vh] bg-slate-900">
             <div className="flex justify-between items-center border-b px-6 h-[12%]">
               <p>Chat Bot</p>
-              <Button onClick={handleBotRelese} variant={Ghost} size="icon">
+              <Button onClick={handleBotRelease} size="icon" variant="ghost">
                 <Cross1Icon />
               </Button>
             </div>
-            <div className="h-[76%] flex flex-col overflow-y-auto gap-5 px-5 py-2 scroll-container">
-              <div className="self-start pb-5 w-auto">
-                <div className="justify-end self-end px-5 py-2 rounded-md bg-slate-800 w-auto">
-                  <p>Hi, Janada J</p>
-                  <p>You can ask crypto related question</p>
-                  <p>like, price, marketCap etc...</p>
-                </div>
-              </div>
-              {[1, 1, 1, 1, 1, 1].map((item, i) => (
-                <div
-                  key={i}
-                  className={` ${
-                    i % 2 == 0 ? "self-start" : "self-end"
-                  } "pb-5 w-auto"`}
+
+            <div className="h-[76%]  flex flex-col overflow-y-auto  gap-5 px-5 py-2 scroll-container">
+            <div
+                 
+                  
+                  className={`${ "self-start"
+                  } pb-5 w-auto`}
                 >
-                  {i % 2 == 0 ? (
-                    <div className="justify-end self-end px-5 py-2 rounded-md bg-slate-800 w-auto">
-                      <p>prompt who are you</p>
+                  <div className="justify-end self-end px-5 py-2 rounded-md bg-slate-800 w-auto">
+                      {`hi, ${auth.user?.fullName}`}
+                      <p>you can ask crypto related any question</p>
+                      <p>like, price, market cap extra...</p>
+                    </div>
+                  
+                </div>
+              {chatBot.messages.map((item, index) => (
+                <div
+                  ref={chatContainerRef}
+                  key={index}
+                  className={`${
+                    item.role == "user" ? "self-end" : "self-start"
+                  } pb-5 w-auto`}
+                >
+                 
+                  {item.role == "user" ? (
+                    <div className="justify-end self-end px-5 py-2 rounded-full bg-slate-800 w-auto">
+                      {item.prompt}
                     </div>
                   ) : (
-                    <div className="justify-end self-end px-5 py-2 rounded-md bg-slate-600 w-auto">
-                      <p>Hi, Janada J</p>
+                    <div className="w-full">
+                      <div className="bg-slate-700 flex gap-2 py-4 px-4 rounded-md min-w-[15rem] w-full">
+                        <p className="">{item.ans}</p>
+                      </div>
                     </div>
                   )}
                 </div>
               ))}
+              {chatBot.loading && <p>fetchin data...</p>}
             </div>
-            <div className="h-[12%] border-t border-border">
+
+            <div className="h-[12%] border-t">
               <Input
                 className="w-full h-full border-none outline-none"
                 placeholder="write prompt"
@@ -194,18 +294,23 @@ const Home = () => {
             </div>
           </div>
         )}
-
-        <div className="relative w-[10rem] cursor-pointer group">
-          <Button
-            onClick={handleBotRelese}
-            className="w-full h-[3rem] flex gap-2 items-center bg-amber-50 hover:bg-amber-100 "
-          >
+        <div
+          onClick={handleBotRelease}
+          className="relative w-[10rem] cursor-pointer group"
+        >
+          <Button  className="w-full h-[3rem] gap-2 items-center">
+            
             <MessageCircle
-              size={50}
-              className="fill-slate-800 -rotate-90 stroke-none "
-            />
-            <span className="text-2xl text-black">Chat Bot</span>
+            fill=""
+            className="fill-[#1e293b] -rotate-[90deg] stroke-none group-hover:fill-[#1a1a1a] "
+            size={30}
+          />
+          
+          <span className=" text-2xl">
+            Chat Bot
+          </span>
           </Button>
+          
         </div>
       </section>
     </div>

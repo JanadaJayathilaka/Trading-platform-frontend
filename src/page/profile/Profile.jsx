@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { VerifiedIcon } from "lucide-react";
-import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,58 +8,69 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import AccountVerificationForm from "./AccountVerificationForm";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import AccountVarificationForm from "./AccountVarificationForm";
+import { VerifiedIcon } from "lucide-react";
+import { enableTwoStepAuthentication, verifyOtp } from "@/Redux/Auth/Action";
 
 const Profile = () => {
   const { auth } = useSelector((store) => store);
-  const handleEnableTwoStepVerification = () => {
-    console.log("two step verification");
+  const dispatch = useDispatch();
+
+  const handleEnableTwoStepVerification = (otp) => {
+    console.log("EnableTwoStepVerification", otp);
+    dispatch(
+      enableTwoStepAuthentication({ jwt: localStorage.getItem("jwt"), otp })
+    );
+  };
+
+  const handleVerifyOtp = (otp) => {
+    console.log("otp  - ", otp);
+    dispatch(verifyOtp({ jwt: localStorage.getItem("jwt"), otp }));
   };
   return (
-    <div className="flex flex-col items-center mb-5 ">
+    <div className="flex flex-col items-center mb-5">
       <div className="pt-10 w-full lg:w-[60%]">
         <Card>
           <CardHeader className="pb-9">
-            <CardTitle>Your Infromantion</CardTitle>
+            <CardTitle>Your Information</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="lg:flex gap-32">
               <div className="space-y-7">
                 <div className="flex">
                   <p className="w-[9rem]">Email : </p>
-                  <p className="text-gray-500">{auth.user?.email}</p>
+                  <p className="text-gray-500">{auth.user?.email} </p>
                 </div>
                 <div className="flex">
                   <p className="w-[9rem]">Full Name : </p>
-                  <p className="text-gray-500">{auth.user?.fullName}</p>
+                  <p className="text-gray-500">{"Jana "} </p>
                 </div>
                 <div className="flex">
-                  <p className="w-[9rem]">Date of Birth : </p>
-                  <p className="text-gray-500">2000/11/28</p>
+                  <p className="w-[9rem]">Date Of Birth : </p>
+                  <p className="text-gray-500">{"28/11/2000"} </p>
                 </div>
                 <div className="flex">
                   <p className="w-[9rem]">Nationality : </p>
-                  <p className="text-gray-500">Srilankan</p>
+                  <p className="text-gray-500">{"Sri Lankan"} </p>
                 </div>
               </div>
               <div className="space-y-7">
                 <div className="flex">
-                  <p className="w-[9rem]">Email : </p>
-                  <p className="text-gray-500">{auth.user?.email}</p>
+                  <p className="w-[9rem]">Address : </p>
+                  <p className="text-gray-500">{"78 Ramukkana"} </p>
                 </div>
                 <div className="flex">
-                  <p className="w-[9rem]">Full Name : </p>
-                  <p className="text-gray-500">{auth.user?.fullName}</p>
+                  <p className="w-[9rem]">City : </p>
+                  <p className="text-gray-500">{"Bandaragama"} </p>
                 </div>
                 <div className="flex">
-                  <p className="w-[9rem]">Date of Birth : </p>
-                  <p className="text-gray-500">2000/11/28</p>
+                  <p className="w-[9rem]">Postcode : </p>
+                  <p className="text-gray-500">{12530} </p>
                 </div>
                 <div className="flex">
-                  <p className="w-[9rem]">Nationality : </p>
-                  <p className="text-gray-500">Srilankan</p>
+                  <p className="w-[9rem]">Country : </p>
+                  <p className="text-gray-500">{"SriLanka"} </p>
                 </div>
               </div>
             </div>
@@ -70,33 +80,108 @@ const Profile = () => {
           <Card className="w-full">
             <CardHeader className="pb-7">
               <div className="flex items-center gap-3">
-                <CardTitle>2step Verification</CardTitle>
-                {true ? (
+                <CardTitle>2 Step Verification</CardTitle>
+
+                {auth.user.twoFactorAuth?.enabled ? (
                   <Badge className="space-x-2 text-white bg-green-600">
-                    <VerifiedIcon className="w-10 h-10" />
-                    <span></span>
-                    Enabled
+                    <VerifiedIcon /> <span>{"Enabled"}</span>
                   </Badge>
                 ) : (
                   <Badge className="bg-orange-500">Disabled</Badge>
                 )}
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-5">
               <div>
                 <Dialog>
                   <DialogTrigger>
-                    <Button className={"bg-white text-background"}>
-                      Enabled Two Step Verification
-                    </Button>
+                    <Button>Enabled Two Step Verification</Button>
                   </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Verify your account?</DialogTitle>
-                      <AccountVerificationForm
-                        handleSubmit={handleEnableTwoStepVerification}
-                      />
+                  <DialogContent className="">
+                    <DialogHeader className="">
+                      <DialogTitle className="px-10 pt-5 text-center">
+                        verify your account
+                      </DialogTitle>
                     </DialogHeader>
+                    <AccountVarificationForm
+                      handleSubmit={handleEnableTwoStepVerification}
+                    />
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="lg:flex gap-5 mt-5">
+          <Card className="w-full">
+            <CardHeader className="pb-7">
+              <CardTitle>Change Password</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5 ">
+              <div className="flex items-center">
+                <p className="w-[8rem]">Email :</p>
+                <p>{auth.user.email}</p>
+              </div>
+              {/* <div className="flex items-center">
+                <p className="w-[8rem]">Mobile :</p>
+                <p>+918987667899</p>
+              </div> */}
+              <div className="flex items-center">
+                <p className="w-[8rem]">Password :</p>
+                <Button variant="secondary">Change Password</Button>
+              </div>
+            </CardContent>
+          </Card>
+          {/* <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Close Account</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5 ">
+              <div className="flex items-center">
+                <p className="w-[8rem]">Customer Id :</p>
+                <p>#53DKJ736</p>
+              </div>
+              <div className="flex items-center">
+                <p className="w-[8rem]">Account :</p>
+                <Button variant="secondary">Close Account</Button>
+              </div>
+            </CardContent>
+          </Card> */}
+          <Card className="w-full">
+            <CardHeader className="pb-7">
+              <div className="flex items-center gap-3">
+                <CardTitle>Account Status</CardTitle>
+
+                {auth.user.verified ? (
+                  <Badge className="space-x-2 text-white bg-green-600">
+                    <VerifiedIcon /> <span>verified</span>
+                  </Badge>
+                ) : (
+                  <Badge className="bg-orange-500">pending</Badge>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="flex items-center">
+                <p className="w-[8rem]">Email :</p>
+                <p>{auth.user.email}</p>
+              </div>
+              <div className="flex items-center">
+                <p className="w-[8rem]">Mobile :</p>
+                <p>+918987667899</p>
+              </div>
+              <div>
+                <Dialog>
+                  <DialogTrigger>
+                    <Button>Verify Account</Button>
+                  </DialogTrigger>
+                  <DialogContent className="">
+                    <DialogHeader className="">
+                      <DialogTitle className="px-10 pt-5 text-center">
+                        verify your account
+                      </DialogTitle>
+                    </DialogHeader>
+                    <AccountVarificationForm handleSubmit={handleVerifyOtp} />
                   </DialogContent>
                 </Dialog>
               </div>

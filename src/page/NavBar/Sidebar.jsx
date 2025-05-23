@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { SheetClose } from "@/components/ui/sheet";
-import { logout } from "@/state/Auth/Action";
+import { LOGOUT } from "@/Redux/Auth/ActionTypes";
+
 import {
   ActivityLogIcon,
   DashboardIcon,
@@ -61,7 +62,7 @@ const Sidebar = () => {
 
   // }
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(LOGOUT());
   };
   return (
     <div className="mt-10 space-y-5">
